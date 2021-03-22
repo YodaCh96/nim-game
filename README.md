@@ -47,18 +47,6 @@ If you only want to read a single number, you can use this function.
 - Define the order in which you will implement and test the functions.
 - Define how/if you test the individual functions (e.g. with the display function, you can see immediately if something is wrong. You can record this and say that you do not test this explicitly).
 
-#### Structogram
-
-![main](images/main.png)
-![displayGame](images/displayGame.png)
-![initGame](images/initGame.png)
-![introGame](images/introGame.png)
-![playWithYoda](images/playWithYoda.png)
-![endOfGame](images/endOfGame.png)
-![showWinner](images/showWinner.png)
-![checkInput](images/checkInput.png)
-![AI](images/AI.png)
-
 ### Implementation
 
 - Define C-functions for all actions.
