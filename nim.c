@@ -1,44 +1,44 @@
 /***  Include Files ***********************************************************/
-#include <stdio.h>  /* Funktionsbibliothek: Standard Ein- Ausgabe */
+#include <stdio.h>  /* Function library: Standard input/output */
 #include <string.h> /* String Library */
-#include <time.h> /* Initialisierung des Zufallsgenerators */
+#include <time.h> /* Initialisation of the random generator */.
 
-/***  Globale Deklarationen und Definitionen **********************************/
-#define MAX_ZEILEN 4 /* Maximum Reihenanzahl */
-#define MAX_STAEBCHEN 7 /* Maximum Staebchen */
-#define GAME_OBJ '|' /* Darstellung Staebchen */
+/*** Global declarations and definitions **********************************/
+#define MAX_ZEILEN 4 /* Maximum number of rows */
+#define MAX_STAEBCHEN 7 /* Maximum sticks */
+#define GAME_OBJ '|' /* Representation of sticks */
 #define MINIMUM 1
 #define FLAG 1
-#define ERROR_MSG "\n\nDiese Eingabe ist nicht gueltig\n"
-#define ROW_CHOICE "\n\nAus welcher Zeile sollen Staebchen genommen werden: "
-#define REMOVE_COUNT "\nWie viele Staebchen sollen entfernt werden: "
+#define ERROR_MSG "\n\nThis entry is not valid.\n"
+#define ROW_CHOICE "\n\nFrom which row should sticks be taken: "
+#define REMOVE_COUNT "\nHow many sticks to remove: "
 
 /***  Funktions-Deklarationen *************************************************/
-void introGame(); /* Spieltitel */
-void initGame(int *zeilearray); /* Initialisierung des Spielbrett erstellen */
-void displayGame(const int *zeilearray, const char gameObj); /* Spielanzeige */
-void playWithYoda(); /* NIM-Logik */
+void introGame(); /* Game title */
+void initGame(int *zeilearray); /* Create initialisation of the board */
+void displayGame(const int *zeilearray, const char gameObj); /* Game display */
+void playWithYoda(); /* NIM-Logic */
 int checkInput(const int *zeilearray, const int maxLimit, const char* msg, const int rowFlag);
-short endOfGame(const int *zeilearray); /* Baustein welcher Spielende ermittelt */
-void showWinner(const char *winner); /* Gewinnner-Anzeige */
-void AI(int *zeilearray, int *zug); /* Computer-Spiel */
+short endOfGame(const int *zeilearray); /* Block which determines end of game */
+void showWinner(const char *winner); /* Winner display */
+void AI(int *zeilearray, int *zug); /* Computer-Game */
 
 /*******************************************************************************
-******************************* HAUPTPROGRAMM **********************************
+******************************* MAIN PROGRAM ***********************************
 *******************************************************************************/
 int main()
 {
-    // lokale Variablen
+    // local variables
     char answer[100];
 
     /* Intro -------------------------------- */
     introGame();
 
-    /* Eingabe ------------------------------ */
+    /* Inout -------------------------------- */
     printf("\nDo you want to play with me? yes/no: ");
     scanf("%s", answer);
 
-    //Auswertung Eingabe
+    // Evaluation input
     if ((strcmp(answer, "yes") == 0) || (strcmp(answer, "y") == 0))
     {
         playWithYoda();
@@ -51,7 +51,7 @@ int main()
         printf("\nInvalid answer...\n");
     }
 
-    /* Nur waehrend der Entwicklungsphase, spaeter loeschen! */
+    /* Only during the development phase, delete later! */
     system ("PAUSE");
     return 0;
 }
@@ -79,7 +79,7 @@ void displayGame(const int *zeilearray, const char gameObj)
 {
     int i, j;
     introGame();
-    // Spielanzeigen
+    // Game displays
     for(i = 0;i < MAX_ZEILEN;i++)
     {
         printf("\nZeile %d (%d): ", i + 1, zeilearray[i]);
@@ -98,10 +98,10 @@ void showWinner(const char *winner)
     printf("The Winner: %s\n", winner);
 }
 
+// End of game determination
 short endOfGame(const int *zeilearray )
 {
     int i;
-    // Spielendenermittlung
     for(i = 0;i < MAX_ZEILEN; i++)
     {
         if(zeilearray[i] > 0)
@@ -120,19 +120,19 @@ void playWithYoda()
     short player = 1;
     char gameObj = GAME_OBJ;
     initGame(zeilearray);
-    /* Verarbeitung ------------------------- */
+    /* Processing ------------------------- */
     do
     {
-        int zug[2]; // zug[0]: entf. Zeile, zug[1]: entf. Staebchen
+        int zug[2]; // zug[0]: removed row, zug[1]: removed sticks
         system("cls");
         displayGame(zeilearray, gameObj);
-        // Zeile auswaehlen
+        // Select row
         rowChoice = checkInput(zeilearray, MAX_ZEILEN, ROW_CHOICE, 1); 
-        // Staebchen entfernen
+        // remove Sticks
         removeCount = checkInput(zeilearray, zeilearray[rowChoice], REMOVE_COUNT, 0);  
         zeilearray[rowChoice] -= removeCount;
         player = (player == 1)? 2 : 1;
-        // Yoda ist dran...
+        // Yoda's turn...
         if(player == 2 && endOfGame(zeilearray) != 1)
         {
             system("cls");
@@ -146,7 +146,7 @@ void playWithYoda()
         }
     } while(endOfGame(zeilearray) != 1);
     
-    /* Ausgabe ------------------------------ */
+    /* Output -------------------------------- */
     if(player == 2)
     {
         showWinner("You");
@@ -193,26 +193,26 @@ void AI(int *zeilearray, int *zug)
     for(i = 0;i < MAX_ZEILEN;i++)
     {
         int temp = zeilearray[i];
-        // Finde die Zeile, die kein Staebchen hat
+        // Find the row that has no stick
         if(zeilearray[i] == 0)
         {
             zeroes++;
         }
-        // Finde die Zeile mit der maximalen Staebchen
+        // Find the row with the maximum sticks
         if(zeilearray[i] > maxCount)
         {
             maxCount = zeilearray[i];
             zielzeile = i;
         }
-        // Finde die Anzahl von zeilearray, die genau 1 Staebchen haben
+        // Find the number of rowarray that have exactly 1 sticks
         if(zeilearray[i] == MINIMUM)
         {
             oneRows++;
         }
 
-        // Es liefert die Anzahl der 2-Potenzen in jeder Zeile
-        // z.B. die Zahl 7 = 111 hat ein 4, ein 2 und ein 1
-        // z.B. die Zahl 5 = 101 hat ein 4 und ein 1
+        // It returns the number of powers of 2 in each line.
+        // e.g. the number 7 = 111 has a 4, a 2 and a 1
+        // e.g. the number 5 = 101 has a 4 and a 1
         if(temp >= 4)
         {
             bitArray[i][2] = 1;
@@ -285,8 +285,8 @@ void AI(int *zeilearray, int *zug)
         zeilearray[zielzeile] == 0 ? ++zeilearray[zielzeile] : --zeilearray[zielzeile];
     }
 
-    // Gib die entfernte Zeile zurueck
+    // Return the removed row
     zug[0] = zielzeile;
-    // Gib die Anzahl der entfernten Staebchen zurueck
+    // Return the number of sticks removed
     zug[1] = zug[1] - zeilearray[zielzeile];
 }
